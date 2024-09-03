@@ -1,0 +1,27 @@
+[project]
+name = "fjcloud-py"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "tyamac", email = "teru@tyamac.dev" }
+]
+dependencies = [
+    "setuptools>=74.1.1",
+    "requests>=2.32.3",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fjcloud_py"]
