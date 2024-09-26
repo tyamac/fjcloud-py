@@ -19,7 +19,7 @@ class NetworkingAPI:
         endpoint = self.base_url + uri
         response = Utilities.get(endpoint, headers=self.headers)
 
-        return response.json()
+        return response
 
 
     def show_network_details(self, network_id: str):
@@ -27,7 +27,7 @@ class NetworkingAPI:
         endpoint = self.base_url + uri
         response = Utilities.get(endpoint, headers=self.headers)
 
-        return response.json()
+        return response
 
 
     def create_network(self, request_parameters: dict = None):
@@ -40,7 +40,7 @@ class NetworkingAPI:
 
         response = Utilities.post(endpoint, headers=self.headers, json_data=request_data)
 
-        return response.json()
+        return response
 
 
     def update_network(self, network_id: str, request_parameters: dict = None):
@@ -53,7 +53,7 @@ class NetworkingAPI:
 
         response = Utilities.put(endpoint, headers=self.headers, json_data=request_data)
 
-        return response.json()
+        return response
 
 
     def delete_network(self, network_id: str):
@@ -61,10 +61,7 @@ class NetworkingAPI:
         endpoint = self.base_url + uri
         response = Utilities.delete(endpoint, headers=self.headers)
 
-        if response.status_code == 204:
-            return None
-        else:
-            return response
+        return response
 
 
     '''def bulc_create_networks(self, request_parameters: list):

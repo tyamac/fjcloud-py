@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Any
+
 
 @dataclass
 class Credential:
@@ -41,6 +42,21 @@ class Credential:
 
 @dataclass
 class CreateBackupRequest:
+    """
+    リクエストオブジェクト、バックアップを作成するために使用される。
+
+    Attributes:
+        volume_id (str): バックアップ対象のボリュームのID。必須。
+        description (Optional[str]): バックアップの説明。デフォルトは None。
+        incremental (Optional[bool]): 増分バックアップを行うかどうか。デフォルトは False。
+        force (Optional[bool]): 強制的にバックアップを作成するかどうか。デフォルトは False。
+        name (Optional[str]): バックアップの名前。デフォルトは None。
+        snapshot_id (Optional[str]): スナップショットのID。デフォルトは None。
+        metadata (Optional[dict]): バックアップに関連付けるメタデータ。デフォルトは None。
+
+    Note:
+        MicroVersion: > 3.43
+    """
     volume_id: str = ""
     description: Optional[str] = None
     incremental: Optional[bool] = False
@@ -49,4 +65,3 @@ class CreateBackupRequest:
     snapshot_id: Optional[str] = None
     metadata: Optional[dict] = None
     """MicroVersion: > 3.43"""
-

@@ -16,6 +16,7 @@ charset-normalizer==3.3.2
     # via requests
 idna==3.8
     # via requests
+python-dotenv==1.0.1
 requests==2.32.3
     # via fjcloud-py
 setuptools==74.1.1

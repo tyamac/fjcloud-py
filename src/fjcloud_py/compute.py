@@ -3,54 +3,52 @@
 
 from .auth import AuthManager
 from .utils import Utilities, get_current_api_version
+import sys
 
 
 class ComputeAPI:
     def __init__(self, client: AuthManager):
-        self.client: AuthManager = client
-        self.token = client.token
+        self.token: str = client.token
+        self.region: str = client.region
+        self.project_id: str = client.project_id
         self.base_url: str = "https://compute.{region}.cloud.global.fujitsu.com".format(
-            region=self.client.region
+            region=self.region
         )
-        self.headers: dict = {"Accept": "application/json", "X-Auth-Token": self.token}
 
-        self.current_api_version = self.list_api_versions().current_api_version
+        self.headers: dict = {"Accept": "application/json", "X-Auth-Token": self.token}
+        self.current_api_version = get_current_api_version(self.list_api_versions())
+        # microバージョン指定のないAPIもこのヘッダーを付与することで害は無いはずなのでデフォルトで付与しとく
+        self.headers["OpenStack-API-Version"] = "compute {}".format(self.current_api_version)
 
 
     def list_api_versions(self):
-        class CurrentApiVersion:
-            def __init__(self, response_json):
-                self.response_json = response_json
-
-            @property
-            def api_versions(self):
-                return self.response_json
-
-            @property
-            def current_api_version(self):
-                return get_current_api_version(self.api_versions)
-
-            def __iter__(self):
-                return iter(str(self.api_versions))
-
-            def __str__(self):
-                return str(self.api_versions)
-
-            def __repr__(self):
-                return f"CurrentApiVersion(api_versions={self.api_versions}, current_api_version={self.current_api_version})"
-        uri = "/"
+        uri: str = "/"
         endpoint = self.base_url + uri
         response = Utilities.get(endpoint, headers=self.headers)
-        #return response.json()
-        return CurrentApiVersion(response.json())
 
+        if response['status'] == 'success':
+            #return response['data'].json()
+            return response['data']
+        else:
+            print("Could not retrieve the Blockstorage API version.")
+            print(response['message'])
+            sys.exit(1)
 
 
     def list_servers(self):
-        uri = "/v2.1/{project_id}/servers".format(project_id=self.client.project_id)
+        uri = "/v2.1/{project_id}/servers".format(project_id=self.project_id)
         endpoint = self.base_url + uri
         headers = {"Accept": "application/json", "X-Auth-Token": self.token, "OpenStack-API-Version": "compute {}".format(self.current_api_version)}
         response = Utilities.get(endpoint, headers=headers)
 
-        return response.json()
+        return response
+
+
+    def list_servers_detailed(self):
+        uri = "/v2.1/{project_id}/servers/detail".format(project_id=self.project_id)
+        endpoint = self.base_url + uri
+        headers = {"Accept": "application/json", "X-Auth-Token": self.token, "OpenStack-API-Version": "compute {}".format(self.current_api_version)}
+        response = Utilities.get(endpoint, headers=headers)
+
+        return response
 

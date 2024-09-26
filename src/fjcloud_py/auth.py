@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .utils import Utilities
 from .schemas import Credential
 import requests
+import sys
 
 
 class AuthManager:
@@ -37,10 +37,17 @@ class AuthManager:
             }
         }
 
-        response = Utilities.post(self.identity_url, headers=headers, json_data=data)
-        token: str = response.headers["X-Subject-Token"]
+        #response = Utilities.post(self.identity_url, headers=headers, json_data=data)
+        response = requests.post(self.identity_url, headers=headers, json=data)
 
-        return token
+        if response.status_code == 201:
+            token: str = response.headers["X-Subject-Token"]
+            return token
+        else:
+            print(response.json())
+            sys.exit(1)
+
+
 
 
     def validate_token(self):
