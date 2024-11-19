@@ -10,6 +10,4 @@ wheels/
 # venv
 .venv
 
-# test
-test.py
-.env
+.env*
