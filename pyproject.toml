@@ -8,6 +8,7 @@ authors = [
 dependencies = [
     "setuptools>=74.1.1",
     "requests>=2.32.3",
+    "pycryptodome>=3.21.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -20,6 +21,8 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = [
     "python-dotenv>=1.0.1",
+    "pyyaml>=6.0.2",
+    "pycryptodome>=3.21.0",
 ]
 
 [tool.hatch.metadata]
